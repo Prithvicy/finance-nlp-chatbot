@@ -15,6 +15,12 @@ app.add_middleware(
 DATA_SERVICE_URL = "http://data_service:8001"
 RAG_SERVICE_URL = "http://rag_service:8002"
 
+# Define a set of known ticker symbols (both crypto and famous stocks)
+KNOWN_TICKERS = {
+    "BTC", "ETH", "XRP", "LTC", "DOGE",
+    "AAPL", "TSLA", "GOOG", "AMZN", "MSFT"
+}
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Finance NLP Chatbot API"}
@@ -23,9 +29,17 @@ def read_root():
 async def chat(query: str):
     query_lower = query.lower().replace("today", "").strip()
     if "price" in query_lower or "worth" in query_lower:
-        # Price query logic
+        # Price query logic: look for a known ticker in the query.
         words = query_lower.split()
-        ticker = words[-1].upper() if words[-1].isalpha() else "BTC"
+        ticker = None
+        for word in words:
+            candidate = word.upper()
+            if candidate in KNOWN_TICKERS:
+                ticker = candidate
+                break
+        # Fallback to default ticker if none found.
+        if not ticker:
+            ticker = "BTC"
         try:
             response = requests.get(f"{DATA_SERVICE_URL}/price?ticker={ticker}")
             response.raise_for_status()
