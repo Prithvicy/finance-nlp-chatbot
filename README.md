@@ -1,6 +1,6 @@
 # Finance NLP Chatbot
 
-![Financial Application Architecture](assets/arch.png "Financial Application Architecture")
+![Financial Application Architecture](assets/architecture.png "Financial Application Architecture")
 
 A real-time financial assistant built with a microservices architecture that provides financial information, news, and insights through natural language processing.
 
@@ -151,3 +151,18 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Redis
 - CoinMarketCap API
 - Financial Modeling Prep API
+
+
+## Chatbot Output Examples
+
+### Price Information
+![Price Output](assets/price.png "Price Information")
+
+### Crypto News Output
+![Crypto News Output](assets/BTC_news.png "Crypto News Output")
+
+### Stock News Output
+![Stock News Output](assets/stock_news.png "Stock News Output")
+
+### Political Influence Output
+![Political Influence Output](assets/Political_influence_onstock_context.png "Political Influence Output")
