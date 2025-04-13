@@ -1,0 +1,10 @@
+requests
+feedparser
+beautifulsoup4
+pymongo
+apscheduler
+python-dotenv
+sentence-transformers==2.2.2
+transformers==4.34.0
+qdrant-client==1.3.1
+numpy<2  # Add this to enforce NumPy 1.x

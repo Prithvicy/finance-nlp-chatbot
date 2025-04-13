@@ -1,0 +1,70 @@
+services:
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - data_service
+    environment:
+      - REDIS_HOST=redis
+      - DATA_SERVICE_URL=http://data_service:8001
+  data_service:
+    build: ./data_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+      - mongo # Add this line
+    environment:
+      - COINMARKETCAP_API_KEY=${COINMARKETCAP_API_KEY}
+      - FMP_API_KEY=${FMP_API_KEY}
+      - REDIS_HOST=redis
+      - MONGO_URI=mongodb://mongo:27017/ # Add this line if not in .env
+  news_service:
+    build: ./news_service
+    volumes:
+      - ./news_service:/app
+    command: python -u news_fetcher.py
+    depends_on:
+      - mongo
+  scraper_service:
+    build: ./scraper_service
+    ports:
+      - "8003:8003"
+  prediction_service:
+    build: ./prediction_service
+    ports:
+      - "8004:8004"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api_gateway
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  qdrant:
+    image: qdrant/qdrant:v1.3.0
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+  rag_service:
+    build: ./rag_service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - qdrant
+volumes:
+  mongo-data:
+  qdrant_data:

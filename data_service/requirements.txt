@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+redis
+python-dotenv
+pymongo  # Add this line
